@@ -10,8 +10,9 @@
 2. **Install Dependencies**
    ```sh
    npm install
-   npm install express
-   npm install --save-dev swagger-autogen
-   npm install swagger-ui-express
    npm install -g nodemon (optional)
+   npm install express
+   npm install express-session
+   npm install --save-dev swagger-autogen
+   npm install swagger-ui-express 
 

@@ -2,6 +2,18 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+const session = require("express-session");
+const authRoutes = require('./auth');
+
+app.use(session({
+    secret: 'supersecret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {}
+}));
+
+app.use('/auth', authRoutes);
+
 app.use(express.json());
 
 let tasks = [
