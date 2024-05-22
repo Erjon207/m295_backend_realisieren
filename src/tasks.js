@@ -37,7 +37,7 @@ let i = tasks.length + 1;
 let currentdate = new Date();
 
 app.get('/tasks', (request, response) => {
-    if (request.session.authetificated == true) {
+    if (request.session.authentificated == true) {
         let session = request.session
         response.json({
             tasks,
@@ -51,17 +51,17 @@ app.get('/tasks', (request, response) => {
 });
 
 app.post('/tasks', (request, response) => {
-    if (request.session.authetificated == true) {
+    if (request.session.authentificated == true) {
         if (request.body.title != null && request.body.title != "" && request.body.description != null && request.body.description != "") {
             request.body.id = i;
             i++
             tasks.push(request.body);
             let body = request.body
             let session = request.session
-            response.json({
+            response.status(201).json({
                 body,
                 session
-            }).status(201);
+            });
             console.log("Die Task wurde erfolgreich hinzugefügt.")
         } else {
             response.sendStatus(400);
@@ -74,7 +74,7 @@ app.post('/tasks', (request, response) => {
 });
 
 app.get('/tasks/:id', (request, response) => {
-    if (request.session.authetificated == true) {
+    if (request.session.authentificated == true) {
         if (tasks.findIndex((task) => task.id == request.params.id)) {
             let body = tasks[tasks.findIndex((task) => task.id == request.params.id)]
             let session = request.session
@@ -82,7 +82,7 @@ app.get('/tasks/:id', (request, response) => {
                 body,
                 session
             });
-            console.log("Die Task mit der id: " + request.params.id + " wurde erfolgreich abgeschickt.")
+            console.log("Die Task mit der id:" + request.params.id + " wurde erfolgreich abgeschickt.")
         } else {
             response.sendStatus(404);
             console.log("Error: Task existiert nicht.")
@@ -94,16 +94,16 @@ app.get('/tasks/:id', (request, response) => {
 });
 
 app.put('/tasks/:id', (request, response) => {
-    if (request.session.authetificated == true) {
+    if (request.session.authentificated == true) {
         if (request.body.title != null && request.body.title != "" && request.body.description != null && request.body.description != "") {
             if (tasks.findIndex((task) => task.id == request.params.id)) {
                 tasks[tasks.findIndex((task) => task.id == request.params.id)] = request.body;
                 let body = tasks[tasks.findIndex((task) => task.id == request.params.id)]
                 let session = request.session
-                response.json({
+                response.status(202).json({
                     body,
                     session
-                }).status(202);
+                });
                 console.log("Die Task mit der Id:" + request.params.id + " wurde erfolgreich bearbeitet.")
             } else {
                 response.sendStatus(404);
@@ -120,17 +120,19 @@ app.put('/tasks/:id', (request, response) => {
 });
 
 app.delete('/tasks/:id', (request, response) => {
-    if (request.session.authetificated == true) {
-        if (tasks.findIndex((task) => task.id == request.params.id)) {
+    if (request.session.authentificated == true) {
+        console.log(request.params.id)
+        console.log(tasks.findIndex((task) => task.id == request.params.id))
+        if (tasks.findIndex((task) => task.id == request.params.id) && tasks.findIndex((task) => task.id == request.params.id) != -1) {
             tasks[tasks.findIndex((task) => task.id == request.params.id)].doneAt = currentdate.getHours() + ":" + currentdate.getMinutes();
             let body = tasks[tasks.findIndex((task) => task.id == request.params.id)]
             let session = request.session
             response.json({
                 body,
                 session
-            }).status(200);
+            });
             console.log("Die Task mit der Id:" + request.params.id + " wurde erfolgreicht beendet.")
-        } else {
+        } else if (tasks.findIndex((task) => task.id == request.params.id) == -1) {
             response.sendStatus(404);
             console.log("Error: Task existiert nicht.")
         }
