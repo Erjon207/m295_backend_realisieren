@@ -7,7 +7,10 @@ router.post('/login', (request, response) => {
     if (request.body.password == "m295" && request.body.email != null && request.body.email != "") {
         request.session.email = request.body.email;
         request.session.authentificated = true;
-        response.status(200).send(request.session);
+        let session = request.session;
+        response.json({
+            session
+        })
     } else {
         response.sendStatus(401);
         console.log("Error: Falsche Login Daten")
@@ -16,7 +19,10 @@ router.post('/login', (request, response) => {
 
 router.get('/verify', (request, response) => {
     if (request.session.authentificated == true){
-        response.send(request.session);
+        let session = request.session;
+        response.json({
+            session
+        })
     } else {
         response.sendStatus(401);
         console.log("Error: Zugriff verweigert auf einen nicht authentifizierter Benutzer");
