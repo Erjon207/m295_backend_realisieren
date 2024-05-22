@@ -7,7 +7,6 @@ router.post('/login', (request, response) => {
     if (request.body.password == "m295") {
         request.session.email = request.body.email;
         request.session.authetificated = true;
-        console.log(request.session)
         response.status(200).send(request.session);
     } else {
         response.status(401).send('Invalid credentials.');

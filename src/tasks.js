@@ -38,7 +38,11 @@ let currentdate = new Date();
 
 app.get('/tasks', (request, response) => {
     if (request.session.authetificated == true) {
-        response.send(tasks);
+        let session = request.session
+        response.json({
+            tasks,
+            session
+        });
     } else {
         response.sendStatus(400);
     }
@@ -49,7 +53,12 @@ app.post('/tasks', (request, response) => {
         request.body.id = i;
         i++
         tasks.push(request.body);
-        response.send(request.body);
+        let body = request.body
+        let session = request.session
+        response.json({
+            body,
+            session
+        });
     } else {
         response.sendStatus(400);
     }
@@ -58,7 +67,12 @@ app.post('/tasks', (request, response) => {
 app.get('/tasks/:id', (request, response) => {
     if (request.session.authetificated == true) {
         if (tasks.findIndex((task) => task.id == request.params.id)) {
-            response.send(tasks[tasks.findIndex((task) => task.id == request.params.id)])
+            let body = tasks[tasks.findIndex((task) => task.id == request.params.id)]
+            let session = request.session
+            response.json({
+                body,
+                session
+            });
         } else {
             response.sendStatus(404);
         }
@@ -71,7 +85,12 @@ app.put('/tasks/:id', (request, response) => {
     if (request.session.authetificated == true) {
         if (tasks.findIndex((task) => task.id == request.params.id)) {
             tasks[tasks.findIndex((task) => task.id == request.params.id)] = request.body;
-            response.send(tasks[tasks.findIndex((task) => task.id == request.params.id)])
+            let body = tasks[tasks.findIndex((task) => task.id == request.params.id)]
+            let session = request.session
+            response.json({
+                body,
+                session
+            });
         } else {
             response.sendStatus(404);
         }
@@ -84,7 +103,12 @@ app.delete('/tasks/:id', (request, response) => {
     if (request.session.authetificated == true) {
         if (tasks.findIndex((task) => task.id == request.params.id)) {
             tasks[tasks.findIndex((task) => task.id == request.params.id)].doneAt = currentdate.getHours() + ":" + currentdate.getMinutes();
-            response.send(tasks[tasks.findIndex((task) => task.id == request.params.id)])
+            let body = tasks[tasks.findIndex((task) => task.id == request.params.id)]
+            let session = request.session
+            response.json({
+                body,
+                session
+            });
         } else {
             response.sendStatus(404);
         }
