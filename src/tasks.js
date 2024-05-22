@@ -43,8 +43,10 @@ app.get('/tasks', (request, response) => {
             tasks,
             session
         });
+        console.log("Alle Tasks werden angezeigt.")
     } else {
-        response.sendStatus(400);
+        response.sendStatus(401);
+        console.log("Error: Zugriff verweigert auf einen nicht authentifizierter Benutzer.");
     }
 });
 
@@ -59,12 +61,15 @@ app.post('/tasks', (request, response) => {
             response.json({
                 body,
                 session
-            });
+            }).status(201);
+            console.log("Die Task wurde erfolgreich hinzugefügt.")
         } else {
             response.sendStatus(400);
+            console.log("Error: Unvollständige Task.")
         }
     } else {
-        response.sendStatus(400);
+        response.sendStatus(401);
+        console.log("Error: Zugriff verweigert auf einen nicht authentifizierter Benutzer.");
     }
 });
 
@@ -77,11 +82,14 @@ app.get('/tasks/:id', (request, response) => {
                 body,
                 session
             });
+            console.log("Die Task mit der id: " + request.params.id + " wurde erfolgreich abgeschickt.")
         } else {
             response.sendStatus(404);
+            console.log("Error: Task existiert nicht.")
         }
     } else {
-        response.sendStatus(400);
+        response.sendStatus(401);
+        console.log("Error: Zugriff verweigert auf einen nicht authentifizierter Benutzer.");
     }
 });
 
@@ -95,15 +103,19 @@ app.put('/tasks/:id', (request, response) => {
                 response.json({
                     body,
                     session
-                });
+                }).status(202);
+                console.log("Die Task mit der Id:" + request.params.id + " wurde erfolgreich bearbeitet.")
             } else {
                 response.sendStatus(404);
+                console.log("Error: Task existiert nicht.")
             }
         } else {
             response.sendStatus(400);
+            console.log("Error: Unvollständige Task.")
         }
     } else {
-        response.sendStatus(400);
+        response.sendStatus(401);
+        console.log("Error: Zugriff verweigert auf einen nicht authentifizierter Benutzer.");
     }
 });
 
@@ -116,12 +128,15 @@ app.delete('/tasks/:id', (request, response) => {
             response.json({
                 body,
                 session
-            });
+            }).status(200);
+            console.log("Die Task mit der Id:" + request.params.id + " wurde erfolgreicht beendet.")
         } else {
             response.sendStatus(404);
+            console.log("Error: Task existiert nicht.")
         }
     } else {
-        response.sendStatus(400);
+        response.sendStatus(401);
+        console.log("Error: Zugriff verweigert auf einen nicht authentifizierter Benutzer.");
     }
 });
 
