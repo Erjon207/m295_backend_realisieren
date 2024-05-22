@@ -37,39 +37,59 @@ let i = tasks.length + 1;
 let currentdate = new Date();
 
 app.get('/tasks', (request, response) => {
-    response.send(tasks);
+    if (request.session.authetificated == true) {
+        response.send(tasks);
+    } else {
+        response.sendStatus(400);
+    }
 });
 
 app.post('/tasks', (request, response) => {
-    request.body.id = i;
-    i++
-    tasks.push(request.body);
-    response.send(request.body);
+    if (request.session.authetificated == true) {
+        request.body.id = i;
+        i++
+        tasks.push(request.body);
+        response.send(request.body);
+    } else {
+        response.sendStatus(400);
+    }
 });
 
 app.get('/tasks/:id', (request, response) => {
-    if (tasks.findIndex((task) => task.id == request.params.id)) {
-        response.send(tasks[tasks.findIndex((task) => task.id == request.params.id)])
+    if (request.session.authetificated == true) {
+        if (tasks.findIndex((task) => task.id == request.params.id)) {
+            response.send(tasks[tasks.findIndex((task) => task.id == request.params.id)])
+        } else {
+            response.sendStatus(404);
+        }
     } else {
-        response.sendStatus(404);
+        response.sendStatus(400);
     }
 });
 
 app.put('/tasks/:id', (request, response) => {
-    if (tasks.findIndex((task) => task.id == request.params.id)) {
-        tasks[tasks.findIndex((task) => task.id == request.params.id)] = request.body;
-        response.send(tasks[tasks.findIndex((task) => task.id == request.params.id)])
+    if (request.session.authetificated == true) {
+        if (tasks.findIndex((task) => task.id == request.params.id)) {
+            tasks[tasks.findIndex((task) => task.id == request.params.id)] = request.body;
+            response.send(tasks[tasks.findIndex((task) => task.id == request.params.id)])
+        } else {
+            response.sendStatus(404);
+        }
     } else {
-        response.sendStatus(404);
+        response.sendStatus(400);
     }
 });
 
 app.delete('/tasks/:id', (request, response) => {
-    if (tasks.findIndex((task) => task.id == request.params.id)) {
-        tasks[tasks.findIndex((task) => task.id == request.params.id)].doneAt = currentdate.getHours() + ":" + currentdate.getMinutes();
-        response.send(tasks[tasks.findIndex((task) => task.id == request.params.id)])
+    if (request.session.authetificated == true) {
+        if (tasks.findIndex((task) => task.id == request.params.id)) {
+            tasks[tasks.findIndex((task) => task.id == request.params.id)].doneAt = currentdate.getHours() + ":" + currentdate.getMinutes();
+            response.send(tasks[tasks.findIndex((task) => task.id == request.params.id)])
+        } else {
+            response.sendStatus(404);
+        }
     } else {
-        response.sendStatus(404);
+        response.sendStatus(400);
     }
 });
 
